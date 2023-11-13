@@ -34,6 +34,19 @@ function setHighScoreInLocalStorage(highscore) {
   }
 }
 
+// Using a recursive function to check whether the food has appeared on the body of the snake. If the conditions are matched, the recursion comes to action.
+function renderFood() {
+  food = {
+    x: Math.floor(a + (b - a) * Math.random()),
+    y: Math.floor(a + (b - a) * Math.random()),
+  };
+
+  for (let index = 0; index < snakeArr.length; index++) {
+    if (food.x == snakeArr[index].x && food.y == snakeArr[index].y)
+      renderFood();
+  }
+}
+
 function gameOver(snakeArr) {
   for (let index = 1; index < snakeArr.length; index++) {
     // If the snake bumps into itself
@@ -72,10 +85,8 @@ function gameEngine() {
       x: snakeArr[0].x + direction.x,
       y: snakeArr[0].y + direction.y,
     });
-    food = {
-      x: Math.floor(a + (b - a) * Math.random()),
-      y: Math.floor(a + (b - a) * Math.random()),
-    };
+    renderFood();
+
     // Incrementing the score
     score++;
   }
