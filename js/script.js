@@ -3,6 +3,7 @@ const board = document.getElementById("board");
 const scoreDisplay = document.getElementById("score");
 const highScoreDisplay = document.getElementById("highScore");
 const gameOverModal = document.getElementById("gameOverModal");
+const navigationButtons = document.querySelectorAll(".navigation-buttons .btn");
 const fps = 8;
 let a = 1;
 let b = 30;
@@ -127,31 +128,53 @@ function gameEngine() {
 // Main Logic
 window.requestAnimationFrame(main);
 window.addEventListener("keydown", (event) => {
-  direction = { x: 1, y: 0 };
-
+  direction = { x: 0, y: 0 };
   switch (event.key) {
     case "ArrowUp":
-      console.log("ArrowUp");
       direction.x = 0;
       direction.y = -1;
       break;
     case "ArrowDown":
-      console.log("ArrowDown");
       direction.x = 0;
       direction.y = 1;
       break;
     case "ArrowLeft":
-      console.log("ArrowLeft");
       direction.x = -1;
       direction.y = 0;
       break;
     case "ArrowRight":
-      console.log("ArrowRight");
       direction.x = 1;
       direction.y = 0;
       break;
-
     default:
       break;
   }
+});
+
+// Logic For Using in browser buttons to navigate the snake
+Array.from(navigationButtons).forEach((button, directionNo) => {
+  button.addEventListener("click", () => {
+    direction = { x: 0, y: 0 };
+    switch (directionNo) {
+      case 0: // upwards
+        direction.x = 0;
+        direction.y = -1;
+        break;
+      case 1: // left side
+        direction.x = -1;
+        direction.y = 0;
+        break;
+      case 2: // right side
+        direction.x = 1;
+        direction.y = 0;
+        break;
+      case 3: // downwards
+        direction.x = 0;
+        direction.y = 1;
+        break;
+
+      default:
+        break;
+    }
+  });
 });

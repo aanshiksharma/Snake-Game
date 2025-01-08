@@ -1,5 +1,0 @@
-1. Set The Local Storage for highscore
-
-2. Prevent the food from appearing on the body of the snake
-
-3. If someone plays the game very hard and manages to fill all the checkers in the board, the game is over and he/she wins the game.
