@@ -17,35 +17,158 @@
     <link rel="stylesheet" href="css/style.css" />
 
     <!-- JavaScript Link -->
+    <script src="js/gameScript.js" defer></script>
     <script src="js/script.js" defer></script>
   </head>
 
   <body>
     <main>
-      <section class="board" id="board"></section>
+      <div id="ui-toggle-dropdown">
+        <div id="ui-dropdown-underlay" class="hidden"></div>
+        <button type="button" id="ui-toggle-button" class="dropdown-button">
+          New UI
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-chevron-down"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
+            />
+          </svg>
+        </button>
+        <div id="ui-dropdown-list" class="hidden dropdown-list">
+          <button type="button" class="btn ui-button">Old UI</button>
+          <button type="button" class="btn ui-button">New UI</button>
+        </div>
+      </div>
 
-      <section class="score-card">
-        <p>Score : <span id="score">0</span></p>
-        <p>High Score : <span id="highScore">0</span></p>
+      <!-- NEW UI -->
+      <section id="new-ui" class="ui-section">
+        <section class="score-card">
+          <div class="dropdown">
+            <div id="dropdown-underlay" class="hidden"></div>
+            <button
+              type="button"
+              id="dropdown-toggle-button"
+              class="dropdown-button"
+            >
+              Medium
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-chevron-down"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
+                />
+              </svg>
+            </button>
+            <div id="dropdown-list" class="hidden dropdown-list">
+              <button type="button" class="btn speed-input">Very Slow</button>
+              <button type="button" class="btn speed-input">Slow</button>
+              <button type="button" class="btn speed-input">Medium</button>
+              <button type="button" class="btn speed-input">Fast</button>
+              <button type="button" class="btn speed-input">Very Fast</button>
+              <button type="button" class="btn speed-input">God Mode</button>
+              <div class="custom-speed-container">
+                <label for="custom-speed">Custom Speed</label>
+                <input
+                  type="range"
+                  name="custom-speed"
+                  id="custom-speed"
+                  min="0"
+                  max="50"
+                />
+              </div>
+            </div>
+          </div>
+          <p>Score : <span id="new-score">0</span></p>
+          <p>Highest : <span class="high-score">0</span></p>
+        </section>
+
+        <section class="board" id="new-board"></section>
+
+        <section class="navigation-buttons">
+          <button type="button" class="btn" id="upButton">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="48px"
+              viewBox="0 -960 960 960"
+              width="48px"
+              fill="#e8eaed"
+            >
+              <path
+                d="M450-160v-526L202-438l-42-42 320-320 320 320-42 42-248-248v526h-60Z"
+              />
+            </svg>
+          </button>
+
+          <div>
+            <button type="button" class="btn" id="leftButton">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="48px"
+                viewBox="0 -960 960 960"
+                width="48px"
+                fill="#e8eaed"
+              >
+                <path
+                  d="m274-450 248 248-42 42-320-320 320-320 42 42-248 248h526v60H274Z"
+                />
+              </svg>
+            </button>
+
+            <button type="button" class="btn" id="rightButton">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="48px"
+                viewBox="0 -960 960 960"
+                width="48px"
+                fill="#e8eaed"
+              >
+                <path
+                  d="M686-450H160v-60h526L438-758l42-42 320 320-320 320-42-42 248-248Z"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <button type="button" class="btn" id="downButton">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="48px"
+              viewBox="0 -960 960 960"
+              width="48px"
+              fill="#e8eaed"
+            >
+              <path
+                d="M450-800v526L202-522l-42 42 320 320 320-320-42-42-248 248v-526h-60Z"
+              />
+            </svg>
+          </button>
+        </section>
       </section>
 
-      <section class="navigation-buttons">
-        <button type="button" class="btn" id="upButton">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="48px"
-            viewBox="0 -960 960 960"
-            width="48px"
-            fill="#e8eaed"
-          >
-            <path
-              d="M450-160v-526L202-438l-42-42 320-320 320 320-42 42-248-248v526h-60Z"
-            />
-          </svg>
-        </button>
+      <!-- OLD UI that is to be hidden -->
+      <section id="old-ui" class="ui-section hidden">
+        <section class="board" id="old-board"></section>
 
-        <div>
-          <button type="button" class="btn" id="leftButton">
+        <section class="score-card">
+          <p>Score : <span id="old-score">0</span></p>
+          <p>High Score : <span class="high-score">0</span></p>
+        </section>
+
+        <section class="navigation-buttons">
+          <button type="button" class="btn" id="upButton">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="48px"
@@ -54,12 +177,42 @@
               fill="#e8eaed"
             >
               <path
-                d="m274-450 248 248-42 42-320-320 320-320 42 42-248 248h526v60H274Z"
+                d="M450-160v-526L202-438l-42-42 320-320 320 320-42 42-248-248v526h-60Z"
               />
             </svg>
           </button>
 
-          <button type="button" class="btn" id="rightButton">
+          <div>
+            <button type="button" class="btn" id="leftButton">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="48px"
+                viewBox="0 -960 960 960"
+                width="48px"
+                fill="#e8eaed"
+              >
+                <path
+                  d="m274-450 248 248-42 42-320-320 320-320 42 42-248 248h526v60H274Z"
+                />
+              </svg>
+            </button>
+
+            <button type="button" class="btn" id="rightButton">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="48px"
+                viewBox="0 -960 960 960"
+                width="48px"
+                fill="#e8eaed"
+              >
+                <path
+                  d="M686-450H160v-60h526L438-758l42-42 320 320-320 320-42-42 248-248Z"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <button type="button" class="btn" id="downButton">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="48px"
@@ -68,25 +221,11 @@
               fill="#e8eaed"
             >
               <path
-                d="M686-450H160v-60h526L438-758l42-42 320 320-320 320-42-42 248-248Z"
+                d="M450-800v526L202-522l-42 42 320 320 320-320-42-42-248 248v-526h-60Z"
               />
             </svg>
           </button>
-        </div>
-
-        <button type="button" class="btn" id="downButton">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="48px"
-            viewBox="0 -960 960 960"
-            width="48px"
-            fill="#e8eaed"
-          >
-            <path
-              d="M450-800v526L202-522l-42 42 320 320 320-320-42-42-248 248v-526h-60Z"
-            />
-          </svg>
-        </button>
+        </section>
       </section>
     </main>
   </body>

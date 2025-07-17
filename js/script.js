@@ -1,180 +1,100 @@
-// Game Constants
-const board = document.getElementById("board");
-const scoreDisplay = document.getElementById("score");
-const highScoreDisplay = document.getElementById("highScore");
-const gameOverModal = document.getElementById("gameOverModal");
-const navigationButtons = document.querySelectorAll(".navigation-buttons .btn");
-const fps = 8;
-let a = 1;
-let b = 30;
-let lastPrintTime = 0;
+const dropdownToggleButton = document.getElementById("dropdown-toggle-button");
+const dropdownList = document.getElementById("dropdown-list");
+const dropdownUnderlay = document.getElementById("dropdown-underlay");
 
-let score = 0;
-let highscore = localStorage.getItem("Highscore") || 0;
-setHighScoreInLocalStorage(0);
+const uiToggleButton = document.getElementById("ui-toggle-button");
+const uiDropdownLsit = document.getElementById("ui-dropdown-list");
+const uiDropdownUnderlay = document.getElementById("ui-dropdown-underlay");
+const newUI = document.getElementById("new-ui");
+const oldUI = document.getElementById("old-ui");
+const uiButtons = document.querySelectorAll(".ui-button");
 
-let food = {
-  x: Math.floor(a + (b - a) * Math.random()),
-  y: Math.floor(a + (b - a) * Math.random()),
+window.onload = () => {
+  dropdownList.classList.add("hidden");
+  dropdownUnderlay.classList.add("hidden");
+  dropdownToggleButton.classList.remove("selected");
 };
-let snakeArr = [{ x: 15, y: 15 }];
-let direction = { x: 0, y: 0 };
 
-// Game Functions
-function main(ctime) {
-  window.requestAnimationFrame(main);
-  if ((ctime - lastPrintTime) / 1000 < 1 / fps) return;
-  lastPrintTime = ctime;
-  gameEngine();
-}
-
-function setHighScoreInLocalStorage(highscore) {
-  // Setting Highscore equal to 0 in localstorage
-  if (highscore > 0) {
-    localStorage.setItem("Highscore", JSON.stringify(highscore));
-  }
-}
-
-// Using a recursive function to check whether the food has appeared on the body of the snake. If the conditions are matched, the recursion comes to action.
-function renderFood() {
-  food = {
-    x: Math.floor(a + (b - a) * Math.random()),
-    y: Math.floor(a + (b - a) * Math.random()),
-  };
-
-  for (let index = 0; index < snakeArr.length; index++) {
-    if (food.x == snakeArr[index].x && food.y == snakeArr[index].y)
-      renderFood();
-  }
-}
-
-function gameOver(snakeArr) {
-  for (let index = 1; index < snakeArr.length; index++) {
-    // If the snake bumps into itself
-    if (
-      snakeArr[index].x == snakeArr[0].x &&
-      snakeArr[index].y == snakeArr[0].y
-    )
-      return true;
-  }
-
-  // If the snake bumps into one of the four walls
-  if (
-    snakeArr[0].x <= 0 ||
-    snakeArr[0].y <= 0 ||
-    snakeArr[0].x >= 30 ||
-    snakeArr[0].y >= 30
-  )
-    return true;
-
-  return false;
-}
-
-// Game Engine
-function gameEngine() {
-  // Updating the Snake's Location
-  if (gameOver(snakeArr)) {
-    direction = { x: 0, y: 0 };
-    alert(`GameOver! Press "Enter" to play again.`);
-    snakeArr = [{ x: 15, y: 15 }];
-    score = 0;
-  }
-
-  // When eaten the food, increment the score and re-render the food
-  if (snakeArr[0].x === food.x && snakeArr[0].y === food.y) {
-    snakeArr.unshift({
-      x: snakeArr[0].x + direction.x,
-      y: snakeArr[0].y + direction.y,
-    });
-    renderFood();
-
-    // Incrementing the score
-    score++;
-  }
-
-  // Updating the score and the highscore
-  if (score >= highscore) {
-    highscore = score;
-    setHighScoreInLocalStorage(highscore);
-  }
-  scoreDisplay.innerHTML = score;
-  highScoreDisplay.innerHTML = highscore;
-
-  // Moving the snake
-  for (let index = snakeArr.length - 2; index >= 0; index--) {
-    snakeArr[index + 1] = { ...snakeArr[index] };
-  }
-  snakeArr[0].x += direction.x;
-  snakeArr[0].y += direction.y;
-
-  // Rendering the snake
-  board.innerHTML = "";
-  snakeArr.forEach((element, index) => {
-    let snakeElement = document.createElement("div");
-    snakeElement.classList.add("snake-body");
-    snakeElement.style.gridColumnStart = element.x;
-    snakeElement.style.gridRowStart = element.y;
-    board.appendChild(snakeElement);
-  });
-
-  // Rendering the food
-  let foodElement = document.createElement("div");
-  foodElement.classList.add("food");
-  foodElement.style.gridColumnStart = food.x;
-  foodElement.style.gridRowStart = food.y;
-  board.appendChild(foodElement);
-}
-
-// Main Logic
-window.requestAnimationFrame(main);
-window.addEventListener("keydown", (event) => {
-  direction = { x: 0, y: 0 };
-  switch (event.key) {
-    case "ArrowUp":
-      direction.x = 0;
-      direction.y = -1;
-      break;
-    case "ArrowDown":
-      direction.x = 0;
-      direction.y = 1;
-      break;
-    case "ArrowLeft":
-      direction.x = -1;
-      direction.y = 0;
-      break;
-    case "ArrowRight":
-      direction.x = 1;
-      direction.y = 0;
-      break;
-    default:
-      break;
-  }
+// Speed Dropdown Toggling
+dropdownToggleButton.addEventListener("click", () => {
+  dropdownList.classList.toggle("hidden");
+  dropdownUnderlay.classList.toggle("hidden");
+  dropdownToggleButton.classList.toggle("selected");
 });
 
-// Logic For Using in browser buttons to navigate the snake
-Array.from(navigationButtons).forEach((button, directionNo) => {
-  button.addEventListener("click", () => {
-    direction = { x: 0, y: 0 };
-    switch (directionNo) {
-      case 0: // upwards
-        direction.x = 0;
-        direction.y = -1;
-        break;
-      case 1: // left side
-        direction.x = -1;
-        direction.y = 0;
-        break;
-      case 2: // right side
-        direction.x = 1;
-        direction.y = 0;
-        break;
-      case 3: // downwards
-        direction.x = 0;
-        direction.y = 1;
-        break;
+dropdownUnderlay.addEventListener("click", () => {
+  dropdownList.classList.toggle("hidden");
+  dropdownUnderlay.classList.toggle("hidden");
+  dropdownToggleButton.classList.toggle("selected");
+});
 
-      default:
-        break;
+// UI Dropdown Toggling
+uiToggleButton.addEventListener("click", () => {
+  uiDropdownLsit.classList.toggle("hidden");
+  uiDropdownUnderlay.classList.toggle("hidden");
+  uiToggleButton.classList.toggle("selected");
+});
+
+uiDropdownUnderlay.addEventListener("click", () => {
+  uiDropdownLsit.classList.toggle("hidden");
+  uiDropdownUnderlay.classList.toggle("hidden");
+  uiToggleButton.classList.toggle("selected");
+});
+
+Array.from(uiButtons).forEach((button) => {
+  button.addEventListener("click", () => {
+    if (button.innerText === "New UI") {
+      newUI.classList.remove("hidden");
+      oldUI.classList.add("hidden");
+      uiToggleButton.innerHTML = `New UI
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-chevron-down"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
+            />
+          </svg>`;
+
+      b = window.innerWidth <= 1000 ? 14 : 20;
+      snakeArr = [{ x: b / 2 + 1, y: b / 2 }];
+      food = {
+        x: Math.floor(a + (b - a) * Math.random()),
+        y: Math.floor(a + (b - a) * Math.random()),
+      };
+    } else if (button.innerText === "Old UI") {
+      newUI.classList.add("hidden");
+      oldUI.classList.remove("hidden");
+      uiToggleButton.innerHTML = `Old UI
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-chevron-down"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
+            />
+          </svg>`;
+
+      b = 30;
+      fps = 8;
+      snakeArr = [{ x: b / 2 + 1, y: b / 2 }];
+      food = {
+        x: Math.floor(a + (b - a) * Math.random()),
+        y: Math.floor(a + (b - a) * Math.random()),
+      };
     }
+    uiDropdownLsit.classList.toggle("hidden");
+    uiDropdownUnderlay.classList.toggle("hidden");
+    uiToggleButton.classList.toggle("selected");
   });
 });
