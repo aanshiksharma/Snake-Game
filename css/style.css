@@ -19,9 +19,97 @@
   --max-grid-width: 360px;
 }
 
+#ui-toggle-dropdown {
+  --primary: #035252;
+  --secondary: hsl(180, 93%, 12%);
+  --background: var(--grey-dark);
+  --surface: var(--grey-light);
+  --shadow: hsl(0 0 0/0.2);
+  --text: #dadada;
+
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+
+  #ui-dropdown-underlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .dropdown-button {
+    position: relative;
+    background: var(--secondary);
+    color: var(--text);
+    z-index: 8;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5em;
+
+    outline: 0;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+
+    padding: 0.5em 0.75em;
+    width: 6.5rem;
+
+    font-size: 1rem;
+
+    cursor: pointer;
+    transition: all 250ms ease;
+
+    &.selected {
+      background: var(--primary);
+    }
+  }
+
+  .dropdown-list {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 0;
+    z-index: 8;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--surface);
+    padding-block: 0.5rem;
+    width: 100%;
+
+    box-shadow: 0.15rem 0.15rem 2px 0 var(--shadow);
+
+    .btn {
+      width: 100%;
+      padding: 0.5em 0.75em;
+
+      border: 0;
+      outline: 0;
+
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+
+      font-size: 0.875rem;
+      white-space: pre;
+
+      transition: all 250ms ease;
+
+      &:hover {
+        background: var(--secondary);
+      }
+    }
+  }
+}
+
 #new-ui {
   --accent: #05adad;
   --primary: #035252;
+  --secondary: hsl(180, 93%, 12%);
   --grey-dark: #0e0e0e;
   --grey-light: #1e1e1e;
   --grey-light-hover: hsl(0 0 17);
@@ -32,8 +120,8 @@
 
   --shadow: hsl(0 0 0/0.2);
 
-  --snake-body: var(--primary);
-  --food: var(--accent);
+  --snake-body: var(--accent);
+  --food: var(--primary);
 
   --text: #dadada;
 
@@ -95,18 +183,25 @@
 
       color: var(--text);
       border-radius: 4px;
-      background: var(--surface);
+      background: var(--secondary);
       padding: 0.75rem 1rem;
       font-family: monospace;
       font-size: 0.75rem;
 
       .dropdown {
         position: relative;
-        z-index: 8;
+
+        #dropdown-underlay {
+          position: fixed;
+          inset: 0;
+          z-index: 1;
+        }
 
         .dropdown-button {
-          background: var(--surface);
+          position: relative;
+          background: var(--secondary);
           color: var(--text);
+          z-index: 8;
 
           display: flex;
           align-items: center;
@@ -126,8 +221,9 @@
           transition: all 250ms ease;
 
           &.selected {
-            border-color: var(--accent);
-            color: var(--accent);
+            /* border-color: var(--accent);
+            color: var(--accent); */
+            background: var(--primary);
           }
         }
 
@@ -135,13 +231,14 @@
           position: absolute;
           top: calc(100% + 0.5rem);
           left: 0;
+          z-index: 8;
 
           display: flex;
           flex-direction: column;
           gap: 0.15rem;
 
           border: 1px solid var(--border);
-          border-radius: 0.25rem;
+          border-radius: 0.5rem;
           background: var(--surface);
           padding-block: 0.5rem;
           width: 100%;
@@ -165,7 +262,19 @@
             transition: all 250ms ease;
 
             &:hover {
-              background: var(--accent);
+              background: var(--secondary);
+            }
+          }
+
+          .custom-speed-container {
+            padding-inline: 1rem;
+            label {
+              font-size: 0.875rem;
+              font-family: Roboto, sans-serif;
+            }
+
+            #custom-speed {
+              width: 100%;
             }
           }
         }
@@ -236,6 +345,7 @@
   .snake-body {
     background: var(--snake-body);
     position: relative;
+    z-index: 10;
   }
 
   /* Food */

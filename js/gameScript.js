@@ -1,21 +1,24 @@
 // Game Constants
-const board = document.getElementById("board");
-const scoreDisplay = document.getElementById("score");
-const highScoreDisplay = document.getElementById("highScore");
-const gameOverModal = document.getElementById("gameOverModal");
+const oldBoard = document.getElementById("old-board");
+const newBoard = document.getElementById("new-board");
+const oldScoreDisplay = document.getElementById("old-score");
+const newScoreDisplay = document.getElementById("new-score");
+const highScoreDisplay = document.querySelectorAll(".high-score");
 const navigationButtons = document.querySelectorAll(".navigation-buttons .btn");
 
 const speedInputs = document.querySelectorAll(".speed-input");
+const customSpeed = document.getElementById("custom-speed");
 
 const a = 1;
-const b = window.innerWidth <= 1000 ? 14 : 20;
+let b = window.innerWidth <= 1000 ? 14 : 20;
+
 const speeds = {
   verySlow: 4,
   slow: 6,
   medium: 8,
   fast: 12,
   veryFast: 20,
-  godMode: 30,
+  godMode: 60,
 };
 
 let fps = speeds.medium;
@@ -109,8 +112,11 @@ function gameEngine() {
     highscore = score;
     setHighScoreInLocalStorage(highscore);
   }
-  scoreDisplay.innerHTML = score;
-  highScoreDisplay.innerHTML = highscore;
+  oldScoreDisplay.innerHTML = score;
+  newScoreDisplay.innerHTML = score;
+  Array.from(highScoreDisplay).forEach((display) => {
+    display.innerHTML = highscore;
+  });
 
   // Changing the speed of the snake
   Array.from(speedInputs).forEach((element) => {
@@ -135,9 +141,29 @@ function gameEngine() {
                   d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
                 />
               </svg>`;
+      // Hide the dropdown after selecting the speed
       dropdownList.classList.add("hidden");
+      dropdownUnderlay.classList.toggle("hidden");
       dropdownToggleButton.classList.remove("selected");
     });
+  });
+
+  customSpeed.addEventListener("change", () => {
+    fps = customSpeed.value;
+    // Change the text in the main toggle button
+    dropdownToggleButton.innerHTML = `Custom ${fps} <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-chevron-down"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
+                />
+              </svg>`;
   });
 
   // Moving the snake
@@ -148,7 +174,8 @@ function gameEngine() {
   snakeArr[0].y += direction.y;
 
   // Rendering the snake
-  board.innerHTML = "";
+  newBoard.innerHTML = "";
+  oldBoard.innerHTML = "";
   let count = 1;
   snakeArr.forEach((element, index) => {
     let snakeElement = document.createElement("div");
@@ -157,7 +184,9 @@ function gameEngine() {
     count++;
     snakeElement.style.gridColumnStart = element.x;
     snakeElement.style.gridRowStart = element.y;
-    board.appendChild(snakeElement);
+    oldUI.classList.contains("hidden")
+      ? newBoard.appendChild(snakeElement)
+      : oldBoard.appendChild(snakeElement);
   });
 
   // Rendering the food
@@ -165,7 +194,9 @@ function gameEngine() {
   foodElement.classList.add("food");
   foodElement.style.gridColumnStart = food.x;
   foodElement.style.gridRowStart = food.y;
-  board.appendChild(foodElement);
+  oldUI.classList.contains("hidden")
+    ? newBoard.appendChild(foodElement)
+    : oldBoard.appendChild(foodElement);
 }
 
 // Main Logic
@@ -190,6 +221,8 @@ window.addEventListener("keydown", (event) => {
       direction.y = 0;
       break;
     default:
+      direction.x = direction.x;
+      direction.y = direction.y;
       break;
   }
 });
